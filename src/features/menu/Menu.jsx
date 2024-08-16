@@ -4,7 +4,7 @@ import { useLoaderData } from "react-router-dom";
 
 function Menu() {
   const menu = useLoaderData();
-  console.log(menu);
+
   return (
     <ul>
       {" "}
@@ -17,7 +17,7 @@ function Menu() {
 
 export async function loader() {
   const menu = await getMenu();
-  console.log("loader", loader);
+
   return menu;
 }
 
