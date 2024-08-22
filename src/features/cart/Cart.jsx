@@ -43,7 +43,7 @@ function Cart() {
 
       <h2 className='mt-7 text-xl font-semibold'>Your cart, {username} </h2>
       <ul className='divide-y divide-slate-300 border-b mt-3'>
-        {cart.map(item=><CartItem item={item} key ={item.key}/>)}
+        {cart.map(item=><CartItem item={item} key ={item.pizzaId}/>)}
       </ul>
 
       <div className='mt-6 space-x-2'>
