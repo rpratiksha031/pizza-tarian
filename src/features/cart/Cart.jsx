@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import LinkButton from '../../ui/LinkButton';
 import Button from '../../ui/Button';
 import CartItem from './CartItem';
@@ -38,20 +38,31 @@ function Cart() {
  
  if(!cart.length) return <EmptyCart/>
   return (
-    <div className='px-4 py-3'>
-      <LinkButton to='/menu'>&larr; Back to menu</LinkButton>
+  <div className="px-4 py-6 bg-yellow-100 rounded-xl shadow-md text-stone-800">
+<div className="text-red-600 font-semibold hover:underline inline-block mb-2">
+  <LinkButton to="/menu">&larr; Back to menu</LinkButton>
+</div>
 
-      <h2 className='mt-7 text-xl font-semibold'>Your cart, {username} </h2>
-      <ul className='divide-y divide-slate-300 border-b mt-3'>
-        {cart.map(item=><CartItem item={item} key ={item.pizzaId}/>)}
-      </ul>
 
-      <div className='mt-6 space-x-2'>
-        <Button type="primary"  to="/order/new"  >Order pizzas</Button>
-        <Link></Link>
-        <Button type="secondary" onClick={()=>dispatch(clearCart())}>Clear cart</Button>
-      </div>
-    </div>
+
+  <h2 className="mt-7 text-2xl font-bold">Your cart, {username}</h2>
+
+  <ul className="divide-y divide-yellow-300 border-b border-yellow-400 mt-4">
+    {cart.map((item) => (
+      <CartItem item={item} key={item.pizzaId} />
+    ))}
+  </ul>
+
+  <div className="mt-6 flex flex-wrap gap-4">
+    <Button type="primary" to="/order/new">
+      Order pizzas
+    </Button>
+    <Button type="secondary" onClick={() => dispatch(clearCart())}>
+      Clear cart
+    </Button>
+  </div>
+</div>
+
   );
 }
 

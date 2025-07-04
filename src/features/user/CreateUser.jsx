@@ -21,15 +21,24 @@ function CreateUser() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <p className='mb-4 text-sm text-stone-600 md:text-base'>👋 Welcome! Please start by telling us your name:</p>
+      <p className="mb-4 text-base md:text-lg text-black font-semibold">
+  👋 Welcome! Please start by telling us your name:
+</p>
 
-      <input
-        type="text" className='w-72 input mb-8'
-        placeholder="Your full name"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      
-      />
+
+<input
+  type="text"
+  className="w-72 px-4 py-2 border border-gray-300 rounded-xl shadow-sm 
+             text-gray-800 placeholder-gray-400 transition duration-200 mb-8
+             focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500
+             hover:border-red-500 hover:ring-1 hover:ring-red-500"
+  placeholder="Your full name"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+/>
+
+
+
 
       {username !== '' && (
         <div>

@@ -8,7 +8,15 @@ function AppLayout() {
   const isLoading = navigation.state === "loading";
 
   return (
-    <div className="grid h-screen grid-rows-[auto_1fr_auto] ">
+    <div className="grid h-screen grid-rows-[auto_1fr_auto] 
+    
+    "
+         style={{
+  backgroundImage: `url('pizzza.jpeg')`, // ← Now it's properly wrapped in quotes
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+}}
+>
       {isLoading && <Loader />}
       <Header />
     <div   className="overflow-scroll">

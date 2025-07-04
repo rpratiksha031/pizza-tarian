@@ -31,28 +31,42 @@ function  MenuItem({ pizza }) {
   }
 
   return (
-    <li className="flex gap-4 py-2">
-      <img src={imageUrl} alt={name} className={`h-24 ${soldOut ?'opacity-70 grayscale':''}`}/>
-      <div className="flex flex-col grow pt-0.5">
-        <p className="font-medium">{name}</p>
-        <p className="text-sm italic text-stone-500 capitalize">{ingredients.join(", ")}</p>
-        <div className="mt-auto flex items-center justify-between">
-          {!soldOut ? <p className="text-sm">{formatCurrency(unitPrice)}</p> : <p className="text-sm font-medium uppercasetext-stone-500">Sold out</p>}
+   <li className="flex gap-4 py-4 px-4 border border-yellow-400 rounded-xl shadow-sm bg-white">
+  <img
+    src={imageUrl}
+    alt={name}
+    className={`h-24 ${soldOut ? 'opacity-70 grayscale' : ''}`}
+  />
+  <div className="flex flex-col grow pt-0.5">
+    <p className="font-bold text-gray-800">{name}</p>
+    <p className="text-sm italic text-stone-500 capitalize">
+      {ingredients.join(", ")}
+    </p>
+    <div className="mt-auto flex items-center justify-between">
+      {!soldOut ? (
+        <p className="text-sm font-semibold">{formatCurrency(unitPrice)}</p>
+      ) : (
+        <p className="text-sm font-semibold uppercase text-stone-500">
+          Sold out
+        </p>
+      )}
 
-        
-       { isInCart&&
-       <div className="flex items-center gap-3 sm:gap-8">
-
-        <UpdateItemQuantity pizzaId={id} currentQuantity={currentQuantity}/>
-       <DeleteItem pizzaId={id}/>
-
-       </div>
-}
-
-          {!soldOut&& !isInCart&&<Button type='small' onClick={handleAddToCart}>Add to cart</Button>}
+      {isInCart && (
+        <div className="flex items-center gap-3 sm:gap-8">
+          <UpdateItemQuantity pizzaId={id} currentQuantity={currentQuantity} />
+          <DeleteItem pizzaId={id} />
         </div>
-      </div>
-    </li>
+      )}
+
+      {!soldOut && !isInCart && (
+        <Button type="small" onClick={handleAddToCart}>
+          Add to cart
+        </Button>
+      )}
+    </div>
+  </div>
+</li>
+
   );
 }
 
