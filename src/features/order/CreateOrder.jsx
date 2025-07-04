@@ -83,7 +83,8 @@ function CreateOrder() {
       // Add payment info to order
       const finalOrder = {
         ...orderData,
-        paymentId: paymentData.paymentId,
+        paymentId: paymentData.transactionId,
+        paymentMethod: paymentData.method,
         paymentStatus: 'completed'
       };
       
@@ -108,10 +109,10 @@ function CreateOrder() {
   if (showPayment && orderData) {
     return (
       <PaymentGateway
-        amount={orderData.totalPrice}
-        orderData={orderData}
-        onSuccess={handlePaymentSuccess}
-        onCancel={handlePaymentCancel}
+        totalAmount={orderData.totalPrice}
+        onPaymentSuccess={handlePaymentSuccess}
+        onPaymentCancel={handlePaymentCancel}
+        isProcessing={false}
       />
     );
   }
