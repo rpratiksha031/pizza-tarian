@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PaymentConfirmation from './PaymentConfirmation';
 
 // Simple icon components using Unicode/CSS
 const CreditCard = ({ size = 24, className = "" }) => (
@@ -39,6 +40,8 @@ export default function PaymentGateway({
 }) {
   const [selectedMethod, setSelectedMethod] = useState('card');
   const [processing, setProcessing] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [paymentResult, setPaymentResult] = useState(null);
   const [paymentData, setPaymentData] = useState({
     cardNumber: '',
     expiryDate: '',
@@ -156,21 +159,60 @@ export default function PaymentGateway({
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Simulate success
-      onPaymentSuccess({
+      // Simulate 90% success rate
+      const isSuccess = Math.random() > 0.1;
+      
+      const result = {
         transactionId: 'TXN' + Date.now(),
         method: selectedMethod,
         amount: totalAmount,
-        status: 'success'
-      });
+        status: isSuccess ? 'success' : 'failed'
+      };
+      
+      setPaymentResult(result);
+      setShowConfirmation(true);
       
     } catch (error) {
       console.error('Payment failed:', error);
-      setErrors({ general: 'Payment failed. Please try again.' });
+      setPaymentResult({
+        transactionId: null,
+        method: selectedMethod,
+        amount: totalAmount,
+        status: 'failed'
+      });
+      setShowConfirmation(true);
     } finally {
       setProcessing(false);
     }
   };
+
+  const handleConfirmationContinue = () => {
+    if (paymentResult.status === 'success') {
+      onPaymentSuccess(paymentResult);
+    } else {
+      onPaymentCancel();
+    }
+  };
+
+  const handleRetry = () => {
+    setShowConfirmation(false);
+    setPaymentResult(null);
+    setErrors({});
+  };
+
+  // Show confirmation screen
+  if (showConfirmation && paymentResult) {
+    return (
+      <PaymentConfirmation
+        isSuccess={paymentResult.status === 'success'}
+        transactionId={paymentResult.transactionId}
+        amount={paymentResult.amount}
+        method={paymentResult.method}
+        onContinue={handleConfirmationContinue}
+        onRetry={handleRetry}
+      />
+    );
+  }
 
   const renderPaymentForm = () => {
     switch (selectedMethod) {
