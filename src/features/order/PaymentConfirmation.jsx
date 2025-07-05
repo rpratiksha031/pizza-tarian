@@ -13,12 +13,24 @@ import {
   Star,
   Zap
 } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import Order from './Order';
 
 // If using React Router, uncomment this line:
 // import { useNavigate } from 'react-router-dom';
 
 // Payment Confirmation Component
 function PaymentConfirmation({ isSuccess, transactionId, amount, method, onContinue, onRetry }) {
+
+
+      const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/order/${Order.id}`);  // change path as needed
+  };
+
+
+
   const methodNames = {
     card: 'Credit/Debit Card',
     upi: 'UPI',
@@ -69,7 +81,7 @@ function PaymentConfirmation({ isSuccess, transactionId, amount, method, onConti
 
       <div className="space-y-3">
         <button
-          onClick={onContinue}
+          onClick={handleClick}
           className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
             isSuccess 
               ? 'bg-green-600 hover:bg-green-700 text-white' 
