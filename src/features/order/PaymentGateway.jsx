@@ -12,6 +12,7 @@ import {
   ArrowLeft,
   Shield
 } from 'lucide-react';
+import Order from './Order';
 
 // PaymentConfirmation Component
 const PaymentConfirmation = ({ 
@@ -52,12 +53,7 @@ const PaymentConfirmation = ({
               </div>
             </div>
             
-            <button
-              onClick={onContinue}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition"
-            >
-              Continue to Order Details
-            </button>
+          
           </div>
         ) : (
           <div className="space-y-4">

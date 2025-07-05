@@ -52,13 +52,13 @@ const PaymentConfirmation = ({
                 <span className="text-green-600 font-medium">Completed</span>
               </div>
             </div>
-            
+{/*             
             <button
               onClick={onContinue}
               className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition"
             >
               Continue to Order Details
-            </button>
+            </button> */}
           </div>
         ) : (
           <div className="space-y-4">
