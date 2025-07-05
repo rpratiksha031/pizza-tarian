@@ -1,98 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  CreditCard, 
-  Smartphone, 
-  Wallet, 
-  DollarSign, 
-  Lock, 
-  CheckCircle, 
-  XCircle, 
+
+import React, { useState } from 'react';
+import {
+  CreditCard,
+  Smartphone,
+  Wallet,
+  DollarSign,
+  Lock,
+  CheckCircle,
+  XCircle,
   RefreshCw,
-  Shield,
-  Star,
-  Zap
+  Zap,
+  ArrowLeft,
+  Shield
 } from 'lucide-react';
 
-// Payment Confirmation Component
-function PaymentConfirmation({ isSuccess, transactionId, amount, method, onContinue, onRetry }) {
-  const methodNames = {
-    card: 'Credit/Debit Card',
-    upi: 'UPI',
-    wallet: 'Digital Wallet',
-    cod: 'Cash on Delivery'
-  };
-
-  // Auto-redirect after successful payment
-  useEffect(() => {
-    if (isSuccess && onContinue) {
-      const timer = setTimeout(() => {
-        onContinue();
-      }, 2000); // 2 second delay to show success message
-
-      return () => clearTimeout(timer);
-    }
-  }, [isSuccess, onContinue]);
-
+// PaymentConfirmation Component
+const PaymentConfirmation = ({ 
+  isSuccess = true, 
+  transactionId = '', 
+  amount = 0, 
+  method = '', 
+  onContinue = () => {}, 
+  onRetry = () => {} 
+}) => {
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-8 text-center">
-      <div className="mb-6">
+    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="p-8 text-center">
         {isSuccess ? (
-          <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <CheckCircle className="w-12 h-12 text-green-600" />
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <CheckCircle className="w-16 h-16 text-green-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">Payment Successful!</h2>
+            <p className="text-gray-600">Thank you for your order</p>
+            
+            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Transaction ID:</span>
+                <span className="font-medium">{transactionId}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Amount:</span>
+                <span className="font-medium">₹{amount}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Method:</span>
+                <span className="font-medium capitalize">{method}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Status:</span>
+                <span className="text-green-600 font-medium">Completed</span>
+              </div>
+            </div>
+            
+            <button
+              onClick={onContinue}
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition"
+            >
+              Continue to Order Details
+            </button>
           </div>
         ) : (
-          <div className="mx-auto w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4">
-            <XCircle className="w-12 h-12 text-red-600" />
-          </div>
-        )}
-        
-        <h2 className={`text-2xl font-bold mb-2 ${isSuccess ? 'text-green-800' : 'text-red-800'}`}>
-          {isSuccess ? 'Payment Successful!' : 'Payment Failed'}
-        </h2>
-        
-        <p className="text-gray-600">
-          {isSuccess 
-            ? 'Your payment has been processed successfully. Redirecting...' 
-            : 'There was an issue processing your payment.'}
-        </p>
-      </div>
-
-      <div className="bg-gray-50 rounded-lg p-4 mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-600">Amount:</span>
-          <span className="font-semibold">₹{amount}</span>
-        </div>
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-600">Method:</span>
-          <span className="font-semibold">{methodNames[method]}</span>
-        </div>
-        {transactionId && (
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">Transaction ID:</span>
-            <span className="font-semibold text-sm">{transactionId}</span>
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <XCircle className="w-16 h-16 text-red-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">Payment Failed</h2>
+            <p className="text-gray-600">Something went wrong with your payment</p>
+            
+            <div className="flex space-x-3">
+              <button
+                onClick={onRetry}
+                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={onContinue}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded-lg transition"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
       </div>
-
-      {/* Only show buttons for failed payments */}
-      {!isSuccess && (
-        <div className="space-y-3">
-          <button
-            onClick={onContinue}
-            className="w-full py-3 px-4 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-all"
-          >
-            Go Back
-          </button>
-          
-          <button
-            onClick={onRetry}
-            className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center space-x-2"
-          >
-            <RefreshCw size={16} />
-            <span>Try Again</span>
-          </button>
-        </div>
-      )}
     </div>
   );
-}
+};
