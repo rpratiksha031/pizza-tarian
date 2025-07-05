@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   CreditCard, 
   Smartphone, 
@@ -13,30 +12,26 @@ import {
   Star,
   Zap
 } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
-import Order from './Order';
-
-// If using React Router, uncomment this line:
-// import { useNavigate } from 'react-router-dom';
 
 // Payment Confirmation Component
 function PaymentConfirmation({ isSuccess, transactionId, amount, method, onContinue, onRetry }) {
-
-
-      const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/order/${Order.id}`);  // change path as needed
-  };
-
-
-
   const methodNames = {
     card: 'Credit/Debit Card',
     upi: 'UPI',
     wallet: 'Digital Wallet',
     cod: 'Cash on Delivery'
   };
+
+  // Auto-redirect after successful payment
+  useEffect(() => {
+    if (isSuccess && onContinue) {
+      const timer = setTimeout(() => {
+        onContinue();
+      }, 2000); // 2 second delay to show success message
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, onContinue]);
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-8 text-center">
@@ -57,7 +52,7 @@ function PaymentConfirmation({ isSuccess, transactionId, amount, method, onConti
         
         <p className="text-gray-600">
           {isSuccess 
-            ? 'Your payment has been processed successfully.' 
+            ? 'Your payment has been processed successfully. Redirecting...' 
             : 'There was an issue processing your payment.'}
         </p>
       </div>
@@ -79,19 +74,16 @@ function PaymentConfirmation({ isSuccess, transactionId, amount, method, onConti
         )}
       </div>
 
-      <div className="space-y-3">
-        <button
-          onClick={handleClick}
-          className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-            isSuccess 
-              ? 'bg-green-600 hover:bg-green-700 text-white' 
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-          }`}
-        >
-          {isSuccess ? 'Continue' : 'Go Back'}
-        </button>
-        
-        {!isSuccess && (
+      {/* Only show buttons for failed payments */}
+      {!isSuccess && (
+        <div className="space-y-3">
+          <button
+            onClick={onContinue}
+            className="w-full py-3 px-4 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-all"
+          >
+            Go Back
+          </button>
+          
           <button
             onClick={onRetry}
             className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center space-x-2"
@@ -99,8 +91,8 @@ function PaymentConfirmation({ isSuccess, transactionId, amount, method, onConti
             <RefreshCw size={16} />
             <span>Try Again</span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
